@@ -1,0 +1,1683 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predict: Day & Night | Psychometric Assessment Trainer</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================================
+           DYNAMIC 5-COLOUR THEME ENGINE (CSS CUSTOM PROPERTIES)
+           ========================================================= */
+        :root, [data-theme="navy"] {
+            --bg-primary: #0b1120;
+            --bg-secondary: #151f32;
+            --bg-tertiary: #1e293b;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border-color: #26354d;
+            --accent-color: #3b82f6;
+            --accent-hover: #2563eb;
+            --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.45);
+            --symbol-stroke: #38bdf8;
+            --symbol-bg: #0f172a;
+        }
+
+        [data-theme="white"] {
+            --bg-primary: #f8fafc;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-color: #2563eb;
+            --accent-hover: #1d4ed8;
+            --card-shadow: 0 12px 28px -6px rgba(15, 23, 42, 0.08);
+            --symbol-stroke: #1e293b;
+            --symbol-bg: #f8fafc;
+        }
+
+        [data-theme="pink"] {
+            --bg-primary: #fdf2f8;
+            --bg-secondary: #ffffff;
+            --bg-tertiary: #fce7f3;
+            --text-primary: #4c0519;
+            --text-secondary: #9d174d;
+            --border-color: #f9a8d4;
+            --accent-color: #db2777;
+            --accent-hover: #be185d;
+            --card-shadow: 0 12px 28px -6px rgba(219, 39, 119, 0.12);
+            --symbol-stroke: #be185d;
+            --symbol-bg: #fff1f2;
+        }
+
+        [data-theme="grey"] {
+            --bg-primary: #e5e7eb;
+            --bg-secondary: #f9fafb;
+            --bg-tertiary: #d1d5db;
+            --text-primary: #111827;
+            --text-secondary: #4b5563;
+            --border-color: #9ca3af;
+            --accent-color: #374151;
+            --accent-hover: #1f2937;
+            --card-shadow: 0 12px 28px -6px rgba(17, 24, 39, 0.12);
+            --symbol-stroke: #1f2937;
+            --symbol-bg: #f3f4f6;
+        }
+
+        [data-theme="burgundy"] {
+            --bg-primary: #2a0813;
+            --bg-secondary: #3f0d1c;
+            --bg-tertiary: #581327;
+            --text-primary: #fff1f2;
+            --text-secondary: #fda4af;
+            --border-color: #771d36;
+            --accent-color: #f43f5e;
+            --accent-hover: #e11d48;
+            --card-shadow: 0 12px 32px -4px rgba(0, 0, 0, 0.55);
+            --symbol-stroke: #fda4af;
+            --symbol-bg: #23060f;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            transition: background-color 0.25s ease, color 0.25s ease;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        .font-mono-num {
+            font-family: 'JetBrains Mono', monospace;
+        }
+
+        /* Theme utility classes */
+        .theme-card {
+            background-color: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            box-shadow: var(--card-shadow);
+            transition: background-color 0.25s ease, border-color 0.25s ease;
+        }
+
+        .theme-subcard {
+            background-color: var(--bg-tertiary);
+            border: 1px solid var(--border-color);
+        }
+
+        .theme-text-muted {
+            color: var(--text-secondary);
+        }
+
+        .theme-border {
+            border-color: var(--border-color);
+        }
+
+        .theme-accent-btn {
+            background-color: var(--accent-color);
+            color: #ffffff;
+            transition: all 0.15s ease;
+        }
+        .theme-accent-btn:hover {
+            background-color: var(--accent-hover);
+            transform: translateY(-1px);
+        }
+
+        .symbol-box {
+            background-color: var(--symbol-bg);
+            border: 2px solid var(--border-color);
+            color: var(--symbol-stroke);
+            transition: all 0.2s ease;
+        }
+
+        /* Swatch Button Active Ring */
+        .theme-swatch {
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+        .theme-swatch:hover {
+            transform: scale(1.12);
+        }
+        .theme-swatch.active-swatch {
+            box-shadow: 0 0 0 3px var(--bg-secondary), 0 0 0 5px var(--accent-color);
+            transform: scale(1.1);
+        }
+
+        /* Range Slider Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 26px;
+            width: 26px;
+            border-radius: 50%;
+            background: var(--accent-color);
+            cursor: pointer;
+            margin-top: -9px;
+            border: 3px solid #fff;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 8px;
+            cursor: pointer;
+            background: var(--bg-tertiary);
+            border-radius: 999px;
+            border: 1px solid var(--border-color);
+        }
+
+        /* Animations */
+        .view-fade {
+            animation: fadeInView 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        @keyframes fadeInView {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body class="flex flex-col min-h-screen">
+
+    <!-- =========================================================
+         TOP NAVIGATION BAR (PERSISTENT)
+         ========================================================= -->
+    <header class="w-full border-b theme-border bg-opacity-90 backdrop-blur-md sticky top-0 z-30" style="background-color: var(--bg-secondary);">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-3">
+            
+            <!-- Left: Brand & User Profile -->
+            <div class="flex items-center gap-3 sm:gap-5 flex-wrap">
+                <button onclick="navigateTo('landing')" class="flex items-center gap-2.5 text-left group focus:outline-none">
+                    <div class="w-9 h-9 rounded-xl flex items-center justify-center font-extrabold text-white shadow-md" style="background-color: var(--accent-color);">
+                        P
+                    </div>
+                    <div>
+                        <span class="font-bold tracking-tight text-base sm:text-lg block leading-none">PREDICT</span>
+                        <span class="text-[11px] theme-text-muted font-medium tracking-wider uppercase block mt-0.5">Psychometric Lab</span>
+                    </div>
+                </button>
+
+                <div class="h-5 w-[1px] theme-border border-r hidden sm:block"></div>
+
+                <!-- Personalized User Pill -->
+                <div class="flex items-center gap-2 theme-subcard px-3 py-1.5 rounded-full text-xs sm:text-sm">
+                    <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                    <span class="theme-text-muted hidden md:inline">Candidate:</span>
+                    <strong id="nav-username" class="font-semibold truncate max-w-[120px] sm:max-w-[180px]">Guest</strong>
+                    <button onclick="openNameModal(true)" title="Switch User / Edit Name" class="ml-1 px-2 py-0.5 rounded-md hover:opacity-80 text-xs font-medium underline theme-text-muted">
+                        Edit
+                    </button>
+                    <button onclick="openResetModal()" title="Reset All Saved Stats" class="px-2 py-0.5 rounded-md text-rose-500 hover:bg-rose-500/10 text-xs font-medium">
+                        Reset Stats
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right: 5-Colour Theme Switcher -->
+            <div class="flex items-center gap-2.5">
+                <span class="text-xs font-medium theme-text-muted hidden lg:inline mr-1">Theme:</span>
+                <button onclick="setTheme('navy')" data-swatch="navy" title="Navy Theme" class="theme-swatch w-6 h-6 rounded-full bg-[#0b1120] border border-slate-500"></button>
+                <button onclick="setTheme('white')" data-swatch="white" title="White Theme" class="theme-swatch w-6 h-6 rounded-full bg-[#ffffff] border border-slate-400"></button>
+                <button onclick="setTheme('pink')" data-swatch="pink" title="Pink Theme" class="theme-swatch w-6 h-6 rounded-full bg-[#f472b6] border border-pink-300"></button>
+                <button onclick="setTheme('grey')" data-swatch="grey" title="Grey Theme" class="theme-swatch w-6 h-6 rounded-full bg-[#9ca3af] border border-gray-600"></button>
+                <button onclick="setTheme('burgundy')" data-swatch="burgundy" title="Burgundy Theme" class="theme-swatch w-6 h-6 rounded-full bg-[#581327] border border-rose-400"></button>
+            </div>
+        </div>
+    </header>
+
+    <!-- =========================================================
+         MAIN CONTENT CONTAINER
+         ========================================================= -->
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 flex flex-col">
+
+        <!-- =====================================================
+             VIEW 1: LANDING PAGE (MODES + MINI-DASHBOARDS)
+             ===================================================== -->
+        <section id="view-landing" class="view-fade space-y-8">
+            
+            <!-- Personalized Hero Greeting -->
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-4 border-b theme-border pb-6">
+                <div>
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full text-xs font-semibold uppercase tracking-wider mb-3 theme-subcard">
+                        <span>Arctic Shores Simulation</span>
+                        <span>•</span>
+                        <span>v1 Fixed Symbol Matrix</span>
+                    </div>
+                    <h1 class="text-3xl sm:text-4xl font-extrabold tracking-tight">
+                        Welcome back, <span id="hero-username" style="color: var(--accent-color);">Candidate</span>
+                    </h1>
+                    <p class="theme-text-muted mt-1.5 text-sm sm:text-base max-w-2xl">
+                        Deduce whether abstract symbol pairs predict <strong>Day</strong> or <strong>Night</strong> within a 3.0-second window. Master statistical probability without getting shaken by random variance.
+                    </p>
+                </div>
+                <!-- Secondary Navigation Buttons -->
+                <div class="flex flex-wrap items-center gap-3">
+                    <button onclick="navigateTo('tips')" class="theme-card hover:opacity-90 px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/></svg>
+                        Tips &amp; Best Practices
+                    </button>
+                    <button onclick="navigateTo('history')" class="theme-card hover:opacity-90 px-4 py-2.5 rounded-xl font-semibold text-sm flex items-center gap-2 transition">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                        Full Run History
+                    </button>
+                </div>
+            </div>
+
+            <!-- TWO GAME MODE CARDS -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                
+                <!-- Mode 1: Standard Predict (50 Rounds) -->
+                <div class="theme-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-blue-500/15 text-blue-400 border border-blue-500/30">
+                                Primary Assessment
+                            </span>
+                            <span class="font-mono-num text-xs theme-text-muted">50 Rounds • 3.0s Limit</span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">Standard Predict Mode</h2>
+                        <p class="theme-text-muted text-sm leading-relaxed mb-6">
+                            Full 50-round simulation replicating the real psychometric test structure. Features the 5 fixed symbol pairs, a strict 3.0-second decision clock per round, and the <strong>Confidence Calibration Slider</strong> during the final 8 rounds (Rounds 43–50).
+                        </p>
+                        <ul class="space-y-2 text-xs sm:text-sm theme-text-muted mb-8">
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> 50 sequential trials across 5 fixed symbol pairs
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> Confidence rating prompts on Rounds 43–50
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> Full Strategy Consistency &amp; Variance Resilience breakdown
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="startAssessment('standard')" class="theme-accent-btn w-full py-4 rounded-xl font-bold text-base shadow-lg flex items-center justify-center gap-2">
+                        <span>Launch 50-Round Standard Test</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6"/></svg>
+                    </button>
+                </div>
+
+                <!-- Mode 2: Endurance Mode (Free Play + Stopwatch) -->
+                <div class="theme-card rounded-2xl p-6 sm:p-8 flex flex-col justify-between relative overflow-hidden">
+                    <div>
+                        <div class="flex items-center justify-between gap-2 mb-4">
+                            <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider bg-amber-500/15 text-amber-400 border border-amber-500/30">
+                                Endless Free Play
+                            </span>
+                            <span class="font-mono-num text-xs theme-text-muted">Stopwatch • No Slider</span>
+                        </div>
+                        <h2 class="text-2xl font-bold mb-2">Endurance Mode (Free Run)</h2>
+                        <p class="theme-text-muted text-sm leading-relaxed mb-6">
+                            Continuous, uninterrupted flow with an upward-counting session stopwatch and the standard 3.0-second turn timer. Ideal for drilling rapid pattern recognition and testing your stamina over as many rounds as you choose.
+                        </p>
+                        <ul class="space-y-2 text-xs sm:text-sm theme-text-muted mb-8">
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> Play indefinitely &amp; finish whenever you are ready
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> Zero confidence slider interruptions for pure speed
+                            </li>
+                            <li class="flex items-center gap-2">
+                                <span class="text-emerald-500 font-bold">✓</span> Tracks total questions answered &amp; session duration
+                            </li>
+                        </ul>
+                    </div>
+                    <button onclick="startAssessment('endurance')" class="w-full py-4 rounded-xl font-bold text-base border-2 theme-border hover:opacity-90 transition flex items-center justify-center gap-2 theme-subcard">
+                        <span>Start Endurance Free Play</span>
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- DEDICATED TIPS & HISTORY CALLOUT BAR -->
+            <div class="theme-subcard rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <div class="flex items-center gap-3.5">
+                    <div class="w-10 h-10 rounded-xl flex items-center justify-center font-bold text-white shrink-0" style="background-color: var(--accent-color);">
+                        ?
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm sm:text-base">Want to maximize your Strategy Consistency score?</h3>
+                        <p class="text-xs sm:text-sm theme-text-muted">Read our tactical breakdown on handling 1-in-5 statistical anomalies and calibrating confidence.</p>
+                    </div>
+                </div>
+                <div class="flex items-center gap-3 shrink-0 w-full sm:w-auto">
+                    <button onclick="navigateTo('tips')" class="flex-1 sm:flex-initial theme-accent-btn px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold">
+                        Read Strategy Guide
+                    </button>
+                    <button onclick="navigateTo('history')" class="flex-1 sm:flex-initial theme-card px-4 py-2.5 rounded-xl text-xs sm:text-sm font-semibold">
+                        View All 15 Recent Runs
+                    </button>
+                </div>
+            </div>
+
+            <!-- MINI-DASHBOARD: SEPARATE STANDARD & ENDURANCE TRACKING -->
+            <div>
+                <div class="flex items-center justify-between mb-4">
+                    <h2 class="text-xl font-bold">Performance Snapshot (Recent 3 Runs)</h2>
+                    <span class="text-xs theme-text-muted">Saved locally for <strong id="dash-username">Guest</strong></span>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                    
+                    <!-- Mini-Dashboard 1: Standard Mode Tracking -->
+                    <div class="theme-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between border-b theme-border pb-3 mb-4">
+                            <div>
+                                <h3 class="font-bold text-base">Standard Mode (50 Rounds)</h3>
+                                <p class="text-xs theme-text-muted">Headline Aggregates &amp; Last 3 Attempts</p>
+                            </div>
+                            <span id="std-total-runs" class="font-mono-num text-xs px-2.5 py-1 rounded-md theme-subcard font-semibold">0 Runs</span>
+                        </div>
+
+                        <!-- Aggregate Metrics -->
+                        <div class="grid grid-cols-3 gap-3 mb-5">
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Best Accuracy</div>
+                                <div id="std-best-acc" class="font-mono-num text-xl font-bold mt-1">—</div>
+                            </div>
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Best Consistency</div>
+                                <div id="std-best-cons" class="font-mono-num text-xl font-bold mt-1 text-emerald-500">—</div>
+                            </div>
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Avg Reaction</div>
+                                <div id="std-avg-rt" class="font-mono-num text-xl font-bold mt-1">—</div>
+                            </div>
+                        </div>
+
+                        <!-- Recent 3 Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="border-b theme-border theme-text-muted uppercase text-[10px]">
+                                        <th class="pb-2 font-semibold">Date / Time</th>
+                                        <th class="pb-2 font-semibold">Accuracy</th>
+                                        <th class="pb-2 font-semibold">Consistency</th>
+                                        <th class="pb-2 font-semibold text-right">Avg Speed</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="std-recent-tbody" class="divide-y theme-border">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Mini-Dashboard 2: Endurance Mode Tracking -->
+                    <div class="theme-card rounded-2xl p-6">
+                        <div class="flex items-center justify-between border-b theme-border pb-3 mb-4">
+                            <div>
+                                <h3 class="font-bold text-base">Endurance Mode (Free Run)</h3>
+                                <p class="text-xs theme-text-muted">Headline Aggregates &amp; Last 3 Attempts</p>
+                            </div>
+                            <span id="end-total-runs" class="font-mono-num text-xs px-2.5 py-1 rounded-md theme-subcard font-semibold">0 Runs</span>
+                        </div>
+
+                        <!-- Aggregate Metrics -->
+                        <div class="grid grid-cols-3 gap-3 mb-5">
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Best Accuracy</div>
+                                <div id="end-best-acc" class="font-mono-num text-xl font-bold mt-1">—</div>
+                            </div>
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Best Consistency</div>
+                                <div id="end-best-cons" class="font-mono-num text-xl font-bold mt-1 text-emerald-500">—</div>
+                            </div>
+                            <div class="theme-subcard p-3 rounded-xl text-center">
+                                <div class="text-[11px] theme-text-muted uppercase font-semibold">Avg Reaction</div>
+                                <div id="end-avg-rt" class="font-mono-num text-xl font-bold mt-1">—</div>
+                            </div>
+                        </div>
+
+                        <!-- Recent 3 Table -->
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-xs">
+                                <thead>
+                                    <tr class="border-b theme-border theme-text-muted uppercase text-[10px]">
+                                        <th class="pb-2 font-semibold">Date</th>
+                                        <th class="pb-2 font-semibold">Questions</th>
+                                        <th class="pb-2 font-semibold">Accuracy</th>
+                                        <th class="pb-2 font-semibold">Consistency</th>
+                                        <th class="pb-2 font-semibold text-right">Duration</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="end-recent-tbody" class="divide-y theme-border">
+                                    <!-- Populated via JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             VIEW 2: ACTIVE GAME ARENA
+             ===================================================== -->
+        <section id="view-game" class="hidden view-fade flex-1 flex flex-col justify-center max-w-3xl w-full mx-auto">
+            
+            <!-- Game Top Status Bar -->
+            <div class="flex items-center justify-between gap-4 mb-3">
+                <div class="flex items-center gap-3">
+                    <span id="game-mode-badge" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider theme-subcard">
+                        Standard Mode
+                    </span>
+                    <span id="game-round-counter" class="font-mono-num text-lg font-bold">
+                        Round 1 / 50
+                    </span>
+                </div>
+
+                <!-- Elapsed Stopwatch (Endurance) & Turn Timer Readout -->
+                <div class="flex items-center gap-4">
+                    <div id="endurance-stopwatch-box" class="hidden items-center gap-1.5 theme-subcard px-3 py-1 rounded-lg text-xs font-mono-num">
+                        <span class="theme-text-muted">Elapsed:</span>
+                        <strong id="game-stopwatch">00:00</strong>
+                    </div>
+                    <div class="font-mono-num text-sm theme-text-muted">
+                        Turn: <strong id="game-turn-timer-text">3.0s</strong>
+                    </div>
+                    <button id="btn-end-endurance" onclick="finishAssessment()" class="hidden px-3.5 py-1.5 rounded-lg bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold transition shadow">
+                        End &amp; View Analytics
+                    </button>
+                    <button onclick="abortGameToMenu()" class="px-3 py-1.5 rounded-lg theme-subcard hover:opacity-80 text-xs font-semibold">
+                        Quit
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3.0s Visual Turn Progress Bar -->
+            <div class="w-full h-3 rounded-full theme-subcard overflow-hidden mb-6 p-0.5">
+                <div id="game-timer-bar" class="h-full rounded-full transition-all duration-75" style="width: 100%; background-color: var(--accent-color);"></div>
+            </div>
+
+            <!-- Main Assessment Card -->
+            <div class="theme-card rounded-3xl p-6 sm:p-10 relative overflow-hidden flex flex-col items-center min-h-[420px] justify-between">
+                
+                <div class="text-center">
+                    <p class="text-xs uppercase tracking-widest font-semibold theme-text-muted mb-1">Observe Symbol Pair</p>
+                    <p class="text-xs theme-text-muted">Predict the atmospheric state before the 3.0s bar depletes</p>
+                </div>
+
+                <!-- TWO DISTINCT GEOMETRIC SYMBOL CARDS SIDE-BY-SIDE -->
+                <div id="symbol-cards-container" class="grid grid-cols-2 gap-5 sm:gap-8 my-6 w-full max-w-md">
+                    <div class="symbol-box aspect-square rounded-2xl flex items-center justify-center p-6 shadow-inner">
+                        <div id="symbol-left-slot" class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center"></div>
+                    </div>
+                    <div class="symbol-box aspect-square rounded-2xl flex items-center justify-center p-6 shadow-inner">
+                        <div id="symbol-right-slot" class="w-24 h-24 sm:w-28 sm:h-28 flex items-center justify-center"></div>
+                    </div>
+                </div>
+
+                <!-- CONFIDENCE SLIDER OVERLAY (Standard Mode Rounds 43-50 ONLY, triggered AFTER picking Day/Night) -->
+                <div id="confidence-modal-overlay" class="hidden absolute inset-0 z-20 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center" style="background-color: color-mix(in srgb, var(--bg-secondary) 94%, transparent);">
+                    <span class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider mb-3 theme-subcard" style="color: var(--accent-color);">
+                        Metacognitive Check • Final 8 Rounds
+                    </span>
+                    <h3 class="text-2xl font-extrabold mb-2">How confident are you in this prediction?</h3>
+                    <p class="text-xs sm:text-sm theme-text-muted max-w-md mb-6">
+                        Rate your certainty from <strong>1 (Pure Guess)</strong> to <strong>10 (Highly Certain)</strong> based on what you have learned about this symbol pair so far.
+                    </p>
+                    <div class="w-full max-w-md theme-subcard p-6 rounded-2xl mb-6">
+                        <div class="flex justify-between items-center mb-3">
+                            <span class="text-xs theme-text-muted font-semibold">1 • Low Certainty</span>
+                            <span class="font-mono-num text-2xl font-extrabold" style="color: var(--accent-color);"><span id="conf-slider-val">5</span> / 10</span>
+                            <span class="text-xs theme-text-muted font-semibold">10 • High Certainty</span>
+                        </div>
+                        <input type="range" id="conf-slider-input" min="1" max="10" value="5" oninput="document.getElementById('conf-slider-val').textContent = this.value">
+                    </div>
+                    <button onclick="submitConfidenceAndReveal()" class="theme-accent-btn px-8 py-3.5 rounded-xl font-bold text-sm shadow-lg">
+                        Lock Confidence &amp; Reveal Outcome
+                    </button>
+                </div>
+
+                <!-- IMMEDIATE ROUND OUTCOME OVERLAY (1.0s Reveal) -->
+                <div id="outcome-overlay" class="hidden absolute inset-0 z-20 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center" style="background-color: color-mix(in srgb, var(--bg-secondary) 93%, transparent);">
+                    <div id="outcome-icon-box" class="w-20 h-20 rounded-full flex items-center justify-center mb-3 text-4xl shadow-lg"></div>
+                    <div id="outcome-actual-label" class="text-xs font-bold uppercase tracking-widest theme-text-muted mb-1">Actual Outcome: DAY</div>
+                    <h3 id="outcome-status-title" class="text-3xl sm:text-4xl font-extrabold tracking-tight">CORRECT</h3>
+                    <p id="outcome-rt-sub" class="font-mono-num text-xs theme-text-muted mt-2">Reaction Time: 640 ms</p>
+                </div>
+
+                <!-- DAY & NIGHT SELECTION BUTTONS -->
+                <div class="w-full max-w-lg grid grid-cols-2 gap-4 sm:gap-6">
+                    <button id="btn-choice-day" onclick="handlePlayerChoice('Day')" class="group relative py-4 sm:py-5 px-6 rounded-2xl font-bold text-lg sm:text-xl flex items-center justify-center gap-3 bg-gradient-to-br from-amber-400 to-orange-500 text-slate-950 shadow-lg hover:brightness-105 active:scale-95 transition">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="5"></circle>
+                            <path stroke-linecap="round" d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"></path>
+                        </svg>
+                        <span>DAY</span>
+                        <span class="absolute bottom-1.5 right-3 text-[10px] font-mono-num opacity-60 hidden sm:inline">[← or D]</span>
+                    </button>
+
+                    <button id="btn-choice-night" onclick="handlePlayerChoice('Night')" class="group relative py-4 sm:py-5 px-6 rounded-2xl font-bold text-lg sm:text-xl flex items-center justify-center gap-3 bg-gradient-to-br from-indigo-600 to-slate-900 text-white shadow-lg hover:brightness-110 active:scale-95 transition border border-indigo-400/30">
+                        <svg class="w-7 h-7" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"></path>
+                        </svg>
+                        <span>NIGHT</span>
+                        <span class="absolute bottom-1.5 right-3 text-[10px] font-mono-num opacity-60 hidden sm:inline">[→ or N]</span>
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- =====================================================
+             VIEW 3: POST-GAME ANALYTICS DASHBOARD
+             ===================================================== -->
+        <section id="view-results" class="hidden view-fade space-y-8">
+            
+            <!-- Personalized Results Header -->
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b theme-border pb-6">
+                <div>
+                    <span id="res-mode-pill" class="px-3 py-1 rounded-full text-xs font-bold uppercase tracking-wider theme-subcard">
+                        Standard Mode Complete
+                    </span>
+                    <h1 class="text-2xl sm:text-3xl font-extrabold mt-2">
+                        Great effort, <span id="res-username" style="color: var(--accent-color);">Candidate</span>! Here is your session breakdown.
+                    </h1>
+                    <p class="text-xs sm:text-sm theme-text-muted mt-1">
+                        Remember: Underlying symbol probabilities are strictly kept hidden so you can continue sharpening your intuition on future runs.
+                    </p>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button id="btn-replay-mode" onclick="replayLastMode()" class="theme-accent-btn px-5 py-2.5 rounded-xl font-bold text-sm shadow">
+                        Play Again
+                    </button>
+                    <button onclick="navigateTo('landing')" class="theme-card px-5 py-2.5 rounded-xl font-bold text-sm">
+                        Main Dashboard
+                    </button>
+                </div>
+            </div>
+
+            <!-- Headline KPI Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-5 gap-4">
+                <div class="theme-card p-5 rounded-2xl">
+                    <div class="text-xs font-semibold uppercase theme-text-muted">Raw Accuracy</div>
+                    <div id="res-accuracy" class="font-mono-num text-3xl font-extrabold mt-1">76%</div>
+                    <div id="res-accuracy-sub" class="text-xs theme-text-muted mt-1">38 / 50 hits</div>
+                </div>
+
+                <div class="theme-card p-5 rounded-2xl">
+                    <div class="text-xs font-semibold uppercase theme-text-muted">Strategy Consistency</div>
+                    <div id="res-consistency" class="font-mono-num text-3xl font-extrabold mt-1 text-emerald-500">88%</div>
+                    <div class="text-xs theme-text-muted mt-1">Optimal probability alignment</div>
+                </div>
+
+                <div class="theme-card p-5 rounded-2xl">
+                    <div class="text-xs font-semibold uppercase theme-text-muted">Variance Resilience</div>
+                    <div id="res-resilience" class="font-mono-num text-3xl font-extrabold mt-1 text-sky-400">92%</div>
+                    <div class="text-xs theme-text-muted mt-1">Held nerve after unlucky rolls</div>
+                </div>
+
+                <div class="theme-card p-5 rounded-2xl">
+                    <div class="text-xs font-semibold uppercase theme-text-muted">Avg Reaction Time</div>
+                    <div id="res-rt" class="font-mono-num text-3xl font-extrabold mt-1">740 ms</div>
+                    <div id="res-timeouts" class="text-xs theme-text-muted mt-1">0 Timeouts</div>
+                </div>
+
+                <!-- Dynamic 5th Card: Confidence Calibration (Standard) OR Questions & Duration (Endurance) -->
+                <div class="theme-card p-5 rounded-2xl col-span-2 lg:col-span-1">
+                    <div id="res-fifth-label" class="text-xs font-semibold uppercase theme-text-muted">Confidence Calibration</div>
+                    <div id="res-fifth-val" class="font-mono-num text-3xl font-extrabold mt-1 text-amber-400">84%</div>
+                    <div id="res-fifth-sub" class="text-xs theme-text-muted mt-1">Rounds 43–50 alignment</div>
+                </div>
+            </div>
+
+            <!-- Actionable Coaching Feedback -->
+            <div class="theme-card rounded-2xl p-6">
+                <h2 class="text-lg font-bold mb-3 flex items-center gap-2">
+                    <svg class="w-5 h-5" style="color: var(--accent-color);" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                    Psychometric Assessor Feedback
+                </h2>
+                <div id="res-coaching-text" class="space-y-3 text-sm leading-relaxed theme-text-muted">
+                    <!-- Injected via JS -->
+                </div>
+            </div>
+
+            <!-- Pair-by-Pair Performance Table (Strictly NO Probability Spoilers) -->
+            <div class="theme-card rounded-2xl p-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-4">
+                    <div>
+                        <h2 class="text-lg font-bold">Symbol Pair Performance Breakdown</h2>
+                        <p class="text-xs theme-text-muted">Tracks your personal tendency and win rate on each fixed pair without spoiling the underlying rules.</p>
+                    </div>
+                    <span class="text-xs font-mono-num px-2.5 py-1 rounded theme-subcard">Probabilities Hidden</span>
+                </div>
+
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left text-sm">
+                        <thead>
+                            <tr class="border-b theme-border theme-text-muted text-xs uppercase">
+                                <th class="pb-3 font-semibold">Pair ID &amp; Icons</th>
+                                <th class="pb-3 font-semibold">Appearances</th>
+                                <th class="pb-3 font-semibold">Your Dominant Tendency</th>
+                                <th class="pb-3 font-semibold">Your Win Rate</th>
+                                <th class="pb-3 font-semibold text-right">Avg Reaction Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="res-pair-tbody" class="divide-y theme-border">
+                            <!-- Populated via JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </section>
+
+        <!-- =====================================================
+             VIEW 4: DEDICATED TIPS & BEST PRACTICES PAGE
+             ===================================================== -->
+        <section id="view-tips" class="hidden view-fade space-y-8 max-w-4xl mx-auto">
+            <div class="flex items-center justify-between border-b theme-border pb-5">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--accent-color);">Candidate Preparation Guide</span>
+                    <h1 class="text-3xl font-extrabold mt-1">How to Master the Arctic Shores Predict Task</h1>
+                </div>
+                <button onclick="navigateTo('landing')" class="theme-card px-4 py-2 rounded-xl font-semibold text-sm">
+                    ← Back to Home
+                </button>
+            </div>
+
+            <!-- Core Pillars -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="theme-card p-6 rounded-2xl space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-blue-400">1. Probability vs. Deterministic Rules</div>
+                    <h3 class="text-lg font-bold">There is no 100% "Fixed Code" to crack</h3>
+                    <p class="text-sm theme-text-muted leading-relaxed">
+                        Many candidates waste their first 25 rounds searching for a complex alternating sequence (e.g., "Day, Day, Night, Day"). In reality, each symbol pair operates on a fixed statistical weight. A pair might produce <strong>Day 80% of the time</strong> and <strong>Night 20% of the time</strong>. Your job is simply to identify which outcome happens <em>more often</em> for each pair and lock onto it.
+                    </p>
+                </div>
+
+                <div class="theme-card p-6 rounded-2xl space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-emerald-400">2. Handling the 1-in-5 Statistical Anomaly</div>
+                    <h3 class="text-lg font-bold">Never abandon a working rule after one loss</h3>
+                    <p class="text-sm theme-text-muted leading-relaxed">
+                        Because no pair is 100% certain, you <strong>will</strong> experience rounds where you make the mathematically optimal choice and the game tells you "INCORRECT". The algorithm is specifically watching what you do next time that pair appears. If Pair A gave you Day 4 times in a row and suddenly lands on Night once, <strong>do not panic-switch to Night</strong> on its next appearance. Stick with Day!
+                    </p>
+                </div>
+
+                <div class="theme-card p-6 rounded-2xl space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-amber-400">3. Managing the 3.0-Second Clock</div>
+                    <h3 class="text-lg font-bold">Decisiveness beats hesitation</h3>
+                    <p class="text-sm theme-text-muted leading-relaxed">
+                        Allowing the 3.0-second timer to expire counts as a missed round and hurts both your raw score and your processing speed metric. Keep your fingers resting on the <strong>Left/Right Arrow Keys</strong> (or <strong>D / N</strong> keys) so you can react within 600–1,100ms once you recognize a pair.
+                    </p>
+                </div>
+
+                <div class="theme-card p-6 rounded-2xl space-y-2">
+                    <div class="text-xs font-bold uppercase tracking-wider text-purple-400">4. Metacognitive Confidence Calibration</div>
+                    <h3 class="text-lg font-bold">Match your slider to the pair's stability</h3>
+                    <p class="text-sm theme-text-muted leading-relaxed">
+                        In the final rounds of Standard Mode, the game asks how confident you are from 1 to 10. Avoid dragging the slider to 10 on every single question. Reserve <strong>8–10</strong> for symbol pairs that have shown a very clear, heavy lean, and use <strong>4–6</strong> for pairs that have felt closer to a coin flip or appeared less frequently.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Practical Mental Tracking Method -->
+            <div class="theme-card p-6 sm:p-8 rounded-2xl space-y-4">
+                <h2 class="text-xl font-bold">The "Verbal Anchor" Technique for 5 Pairs</h2>
+                <p class="text-sm theme-text-muted leading-relaxed">
+                    Tracking 5 abstract geometric pairs simultaneously under time pressure overloads working memory if you try to remember raw visuals. Instead, assign a 1-word nickname to each pair the first time you see it:
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-5 gap-3 pt-2">
+                    <div class="theme-subcard p-3 rounded-xl text-center">
+                        <div class="text-xs font-bold mb-1">Pair 1</div>
+                        <div class="text-[11px] theme-text-muted">"Prism / Orbit"</div>
+                    </div>
+                    <div class="theme-subcard p-3 rounded-xl text-center">
+                        <div class="text-xs font-bold mb-1">Pair 2</div>
+                        <div class="text-[11px] theme-text-muted">"Hex / Hourglass"</div>
+                    </div>
+                    <div class="theme-subcard p-3 rounded-xl text-center">
+                        <div class="text-xs font-bold mb-1">Pair 3</div>
+                        <div class="text-[11px] theme-text-muted">"Diamond / Wave"</div>
+                    </div>
+                    <div class="theme-subcard p-3 rounded-xl text-center">
+                        <div class="text-xs font-bold mb-1">Pair 4</div>
+                        <div class="text-[11px] theme-text-muted">"Cross / Crescent"</div>
+                    </div>
+                    <div class="theme-subcard p-3 rounded-xl text-center">
+                        <div class="text-xs font-bold mb-1">Pair 5</div>
+                        <div class="text-[11px] theme-text-muted">"Star / Pillar"</div>
+                    </div>
+                </div>
+                <p class="text-sm theme-text-muted leading-relaxed pt-2">
+                    Repeat a short mental tally like <em>"Prism is Day (+2), Hex is Night (+3)"</em>. Once a pair reaches +3 in one direction, lock that choice in for the rest of the 50 rounds regardless of occasional misses.
+                </p>
+            </div>
+        </section>
+
+        <!-- =====================================================
+             VIEW 5: FULL RUN HISTORY PAGE (15 RECENT RUNS)
+             ===================================================== -->
+        <section id="view-history" class="hidden view-fade space-y-6">
+            <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b theme-border pb-5">
+                <div>
+                    <span class="text-xs font-bold uppercase tracking-wider" style="color: var(--accent-color);">Archive &amp; Progression</span>
+                    <h1 class="text-3xl font-extrabold mt-1">Recent Run History (Last 15 Sessions)</h1>
+                </div>
+                <div class="flex items-center gap-3">
+                    <button onclick="setHistoryFilter('all')" id="hist-tab-all" class="theme-accent-btn px-3.5 py-2 rounded-xl text-xs font-bold">All Modes</button>
+                    <button onclick="setHistoryFilter('standard')" id="hist-tab-standard" class="theme-card px-3.5 py-2 rounded-xl text-xs font-bold">Standard (50)</button>
+                    <button onclick="setHistoryFilter('endurance')" id="hist-tab-endurance" class="theme-card px-3.5 py-2 rounded-xl text-xs font-bold">Endurance</button>
+                    <button onclick="navigateTo('landing')" class="theme-subcard px-4 py-2 rounded-xl font-semibold text-xs ml-2">
+                        ← Back
+                    </button>
+                </div>
+            </div>
+
+            <div class="theme-card rounded-2xl p-6 overflow-x-auto">
+                <table class="w-full text-left text-sm">
+                    <thead>
+                        <tr class="border-b theme-border theme-text-muted text-xs uppercase">
+                            <th class="pb-3 font-semibold">#</th>
+                            <th class="pb-3 font-semibold">Date &amp; Time</th>
+                            <th class="pb-3 font-semibold">Mode</th>
+                            <th class="pb-3 font-semibold">Questions</th>
+                            <th class="pb-3 font-semibold">Raw Accuracy</th>
+                            <th class="pb-3 font-semibold">Strategy Consistency</th>
+                            <th class="pb-3 font-semibold">Variance Resilience</th>
+                            <th class="pb-3 font-semibold">Avg Speed</th>
+                            <th class="pb-3 font-semibold text-right">Duration / Calib</th>
+                        </tr>
+                    </thead>
+                    <tbody id="full-history-tbody" class="divide-y theme-border">
+                        <!-- Populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- =========================================================
+         ONBOARDING / EDIT NAME DIALOG MODAL
+         ========================================================= -->
+    <div id="modal-name" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="theme-card max-w-md w-full rounded-3xl p-6 sm:p-8 shadow-2xl view-fade">
+            <div class="w-12 h-12 rounded-2xl flex items-center justify-center font-extrabold text-white text-xl mb-4" style="background-color: var(--accent-color);">
+                👋
+            </div>
+            <h2 class="text-2xl font-extrabold mb-2">Welcome to Predict Lab</h2>
+            <p class="text-sm theme-text-muted mb-6 leading-relaxed">
+                Enter your name below so we can personalize your psychometric dashboard and track your Standard &amp; Endurance scores on this device.
+            </p>
+            <form onsubmit="saveUserName(event)" class="space-y-4">
+                <div>
+                    <label for="input-candidate-name" class="block text-xs font-bold uppercase tracking-wider theme-text-muted mb-2">Candidate Name</label>
+                    <input id="input-candidate-name" type="text" required maxlength="32" placeholder="e.g. Alex" class="w-full px-4 py-3 rounded-xl theme-subcard focus:outline-none focus:ring-2" style="color: var(--text-primary);">
+                </div>
+                <div class="flex items-center justify-end gap-3 pt-2">
+                    <button type="button" id="btn-cancel-name" onclick="closeNameModal()" class="hidden px-4 py-2.5 rounded-xl theme-subcard text-xs font-bold">
+                        Cancel
+                    </button>
+                    <button type="submit" class="theme-accent-btn px-6 py-3 rounded-xl font-bold text-sm shadow-lg w-full sm:w-auto">
+                        Continue to Dashboard →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         RESET STATS CONFIRMATION MODAL (NO NATIVE ALERT/CONFIRM)
+         ========================================================= -->
+    <div id="modal-reset" class="hidden fixed inset-0 z-50 bg-black/70 backdrop-blur-sm flex items-center justify-center p-4">
+        <div class="theme-card max-w-md w-full rounded-3xl p-6 sm:p-8 shadow-2xl view-fade">
+            <h3 class="text-xl font-extrabold mb-2">Reset All Saved Run History?</h3>
+            <p class="text-sm theme-text-muted mb-6 leading-relaxed">
+                This will clear your Standard and Endurance run history stored on this browser. Your name and colour theme will remain intact.
+            </p>
+            <div class="flex items-center justify-end gap-3">
+                <button onclick="closeResetModal()" class="px-4 py-2.5 rounded-xl theme-subcard text-xs font-bold">
+                    Cancel
+                </button>
+                <button onclick="confirmResetStats()" class="px-5 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white text-xs font-bold shadow">
+                    Yes, Clear History
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- =========================================================
+         APPLICATION JAVASCRIPT ENGINE
+         ========================================================= -->
+    <script>
+        /* =========================================================
+           1. STORAGE KEYS & PERSISTENT STATE
+           ========================================================= */
+        const STORAGE_KEYS = {
+            USER_NAME: 'as_predict_username_v1',
+            THEME: 'as_predict_theme_v1',
+            HISTORY: 'as_predict_history_v1'
+        };
+
+        let appState = {
+            userName: '',
+            theme: 'navy',
+            history: [], // Array of completed run objects (max 30 saved, display 15)
+            historyFilter: 'all'
+        };
+
+        /* =========================================================
+           2. THE 5 FIXED ABSTRACT GEOMETRIC SYMBOL PAIRS
+              - Fixed v1 set (Never reshuffled between runs)
+              - Probabilities are kept strictly internal and NEVER
+                spoiled in the UI.
+           ========================================================= */
+        const SYMBOL_PAIRS = [
+            {
+                id: 1,
+                label: "Pair 1 • Prism & Orbit",
+                // Hidden mechanics: leans Day (85% Day / 15% Night)
+                _pDay: 0.85,
+                _fav: "Day",
+                leftSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <polygon points="40,10 70,64 10,64"></polygon>
+                    <polygon points="40,26 56,56 24,56"></polygon>
+                    <line x1="40" y1="10" x2="40" y2="26"></line>
+                </svg>`,
+                rightSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
+                    <circle cx="40" cy="40" r="26"></circle>
+                    <circle cx="40" cy="40" r="14" stroke-dasharray="6 6"></circle>
+                    <circle cx="40" cy="40" r="4" fill="currentColor"></circle>
+                </svg>`
+            },
+            {
+                id: 2,
+                label: "Pair 2 • Hex & Hourglass",
+                // Hidden mechanics: leans Night (20% Day / 80% Night)
+                _pDay: 0.20,
+                _fav: "Night",
+                leftSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <polygon points="40,8 68,24 68,56 40,72 12,56 12,24"></polygon>
+                    <line x1="12" y1="24" x2="68" y2="56"></line>
+                    <line x1="68" y1="24" x2="12" y2="56"></line>
+                </svg>`,
+                rightSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <polygon points="16,12 64,12 40,40 64,68 16,68 40,40"></polygon>
+                    <circle cx="40" cy="22" r="3" fill="currentColor"></circle>
+                    <circle cx="40" cy="58" r="3" fill="currentColor"></circle>
+                </svg>`
+            },
+            {
+                id: 3,
+                label: "Pair 3 • Diamond & Wave",
+                // Hidden mechanics: leans Day (75% Day / 25% Night)
+                _pDay: 0.75,
+                _fav: "Day",
+                leftSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <polygon points="40,8 72,40 40,72 8,40"></polygon>
+                    <rect x="28" y="28" width="24" height="24"></rect>
+                </svg>`,
+                rightSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
+                    <path d="M10 26 Q25 12, 40 26 T70 26"></path>
+                    <path d="M10 42 Q25 28, 40 42 T70 42"></path>
+                    <path d="M10 58 Q25 44, 40 58 T70 58"></path>
+                </svg>`
+            },
+            {
+                id: 4,
+                label: "Pair 4 • Cross & Crescent",
+                // Hidden mechanics: leans Night (25% Day / 75% Night)
+                _pDay: 0.25,
+                _fav: "Night",
+                leftSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <path d="M30 12 H50 V30 H68 V50 H50 V68 H30 V50 H12 V30 H30 Z"></path>
+                    <circle cx="40" cy="40" r="6"></circle>
+                </svg>`,
+                rightSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M54 16 A26 26 0 1 0 54 64 A20 20 0 1 1 54 16 Z"></path>
+                    <circle cx="56" cy="40" r="5"></circle>
+                </svg>`
+            },
+            {
+                id: 5,
+                label: "Pair 5 • Star & Pillar",
+                // Hidden mechanics: leans Day (68% Day / 32% Night)
+                _pDay: 0.68,
+                _fav: "Day",
+                leftSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round">
+                    <line x1="40" y1="10" x2="40" y2="70"></line>
+                    <line x1="10" y1="40" x2="70" y2="40"></line>
+                    <line x1="19" y1="19" x2="61" y2="61"></line>
+                    <line x1="61" y1="19" x2="19" y2="61"></line>
+                    <rect x="31" y="31" width="18" height="18" fill="var(--symbol-bg)"></rect>
+                </svg>`,
+                rightSvg: `<svg viewBox="0 0 80 80" class="w-full h-full" fill="none" stroke="currentColor" stroke-width="4" stroke-linejoin="round">
+                    <rect x="16" y="14" width="12" height="52" rx="3"></rect>
+                    <rect x="34" y="24" width="12" height="42" rx="3"></rect>
+                    <rect x="52" y="14" width="12" height="52" rx="3"></rect>
+                </svg>`
+            }
+        ];
+
+        /* =========================================================
+           3. ACTIVE SESSION RUNTIME STATE
+           ========================================================= */
+        const TURN_LIMIT_MS = 3000;
+        let session = {
+            active: false,
+            mode: 'standard', // 'standard' (50 rounds) | 'endurance' (free play)
+            round: 0,
+            maxRounds: 50,
+            currentPair: null,
+            roundStartTime: 0,
+            turnTimerId: null,
+            stopwatchId: null,
+            sessionStartTime: 0,
+            elapsedSeconds: 0,
+            awaitingChoice: false,
+            awaitingConfidence: false,
+            pendingChoice: null,
+            pendingReactionMs: 0,
+            trials: [] // { round, pairId, choice, actual, isCorrect, isOptimal, reactionMs, confidence }
+        };
+
+        /* =========================================================
+           4. INITIALIZATION & LOCALSTORAGE BOOTSTRAP
+           ========================================================= */
+        window.addEventListener('DOMContentLoaded', () => {
+            loadSavedState();
+            applyTheme(appState.theme);
+            renderMiniDashboards();
+            renderFullHistoryTable();
+
+            if (!appState.userName) {
+                openNameModal(false);
+            } else {
+                updateUserGreetings();
+            }
+
+            // Keyboard shortcuts for Day (ArrowLeft / D) & Night (ArrowRight / N)
+            window.addEventListener('keydown', (e) => {
+                if (!session.active || !session.awaitingChoice) return;
+                if (e.key === 'ArrowLeft' || e.key === 'd' || e.key === 'D') {
+                    e.preventDefault();
+                    handlePlayerChoice('Day');
+                } else if (e.key === 'ArrowRight' || e.key === 'n' || e.key === 'N') {
+                    e.preventDefault();
+                    handlePlayerChoice('Night');
+                }
+            });
+        });
+
+        function loadSavedState() {
+            try {
+                const savedName = localStorage.getItem(STORAGE_KEYS.USER_NAME);
+                const savedTheme = localStorage.getItem(STORAGE_KEYS.THEME);
+                const savedHistory = localStorage.getItem(STORAGE_KEYS.HISTORY);
+
+                if (savedName) appState.userName = savedName;
+                if (savedTheme) appState.theme = savedTheme;
+                if (savedHistory) appState.history = JSON.parse(savedHistory) || [];
+            } catch (err) {
+                console.warn('LocalStorage read error:', err);
+            }
+        }
+
+        function saveHistoryToStorage() {
+            try {
+                localStorage.setItem(STORAGE_KEYS.HISTORY, JSON.stringify(appState.history.slice(0, 30)));
+            } catch (err) {
+                console.warn('LocalStorage write error:', err);
+            }
+        }
+
+        /* =========================================================
+           5. USER PROFILE & THEME SWITCHER
+           ========================================================= */
+        function openNameModal(allowCancel) {
+            const modal = document.getElementById('modal-name');
+            const input = document.getElementById('input-candidate-name');
+            const cancelBtn = document.getElementById('btn-cancel-name');
+
+            input.value = appState.userName || '';
+            if (allowCancel) {
+                cancelBtn.classList.remove('hidden');
+            } else {
+                cancelBtn.classList.add('hidden');
+            }
+            modal.classList.remove('hidden');
+            setTimeout(() => input.focus(), 50);
+        }
+
+        function closeNameModal() {
+            document.getElementById('modal-name').classList.add('hidden');
+        }
+
+        function saveUserName(e) {
+            e.preventDefault();
+            const input = document.getElementById('input-candidate-name');
+            const cleaned = input.value.trim();
+            if (!cleaned) return;
+
+            appState.userName = cleaned;
+            try {
+                localStorage.setItem(STORAGE_KEYS.USER_NAME, cleaned);
+            } catch (err) {}
+
+            updateUserGreetings();
+            closeNameModal();
+        }
+
+        function updateUserGreetings() {
+            const display = appState.userName || 'Candidate';
+            document.getElementById('nav-username').textContent = display;
+            document.getElementById('hero-username').textContent = display;
+            document.getElementById('dash-username').textContent = display;
+            document.getElementById('res-username').textContent = display;
+        }
+
+        function setTheme(themeName) {
+            appState.theme = themeName;
+            applyTheme(themeName);
+            try {
+                localStorage.setItem(STORAGE_KEYS.THEME, themeName);
+            } catch (err) {}
+        }
+
+        function applyTheme(themeName) {
+            document.documentElement.setAttribute('data-theme', themeName);
+            document.querySelectorAll('.theme-swatch').forEach(btn => {
+                if (btn.getAttribute('data-swatch') === themeName) {
+                    btn.classList.add('active-swatch');
+                } else {
+                    btn.classList.remove('active-swatch');
+                }
+            });
+        }
+
+        function openResetModal() {
+            document.getElementById('modal-reset').classList.remove('hidden');
+        }
+
+        function closeResetModal() {
+            document.getElementById('modal-reset').classList.add('hidden');
+        }
+
+        function confirmResetStats() {
+            appState.history = [];
+            saveHistoryToStorage();
+            renderMiniDashboards();
+            renderFullHistoryTable();
+            closeResetModal();
+        }
+
+        /* =========================================================
+           6. SPA VIEW NAVIGATION
+           ========================================================= */
+        function navigateTo(viewId) {
+            if (session.active && viewId !== 'game') {
+                stopAllTimers();
+                session.active = false;
+            }
+
+            const views = ['landing', 'game', 'results', 'tips', 'history'];
+            views.forEach(v => {
+                const el = document.getElementById(`view-${v}`);
+                if (v === viewId) {
+                    el.classList.remove('hidden');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            if (viewId === 'landing') {
+                renderMiniDashboards();
+            } else if (viewId === 'history') {
+                renderFullHistoryTable();
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        /* =========================================================
+           7. GAMEPLAY ENGINE (STANDARD 50 & ENDURANCE FREE PLAY)
+           ========================================================= */
+        function startAssessment(mode) {
+            stopAllTimers();
+
+            session.active = true;
+            session.mode = mode;
+            session.round = 0;
+            session.maxRounds = mode === 'standard' ? 50 : Infinity;
+            session.trials = [];
+            session.elapsedSeconds = 0;
+            session.sessionStartTime = Date.now();
+
+            // Configure UI badges for selected mode
+            const badge = document.getElementById('game-mode-badge');
+            const stopwatchBox = document.getElementById('endurance-stopwatch-box');
+            const endBtn = document.getElementById('btn-end-endurance');
+
+            if (mode === 'standard') {
+                badge.textContent = 'Standard Mode • 50 Rounds';
+                stopwatchBox.classList.add('hidden');
+                stopwatchBox.classList.remove('flex');
+                endBtn.classList.add('hidden');
+            } else {
+                badge.textContent = 'Endurance Mode • Free Run';
+                stopwatchBox.classList.remove('hidden');
+                stopwatchBox.classList.add('flex');
+                endBtn.classList.remove('hidden');
+                document.getElementById('game-stopwatch').textContent = '00:00';
+                startEnduranceStopwatch();
+            }
+
+            navigateTo('game');
+            nextRound();
+        }
+
+        function replayLastMode() {
+            startAssessment(session.mode || 'standard');
+        }
+
+        function abortGameToMenu() {
+            stopAllTimers();
+            session.active = false;
+            navigateTo('landing');
+        }
+
+        function startEnduranceStopwatch() {
+            clearInterval(session.stopwatchId);
+            session.stopwatchId = setInterval(() => {
+                if (!session.active) return;
+                session.elapsedSeconds = Math.floor((Date.now() - session.sessionStartTime) / 1000);
+                document.getElementById('game-stopwatch').textContent = formatDuration(session.elapsedSeconds);
+            }, 500);
+        }
+
+        function stopAllTimers() {
+            clearInterval(session.turnTimerId);
+            clearInterval(session.stopwatchId);
+        }
+
+        function nextRound() {
+            if (!session.active) return;
+
+            if (session.mode === 'standard' && session.round >= session.maxRounds) {
+                finishAssessment();
+                return;
+            }
+
+            session.round++;
+            session.awaitingChoice = true;
+            session.awaitingConfidence = false;
+            session.pendingChoice = null;
+
+            // Update Round Counter
+            const counterEl = document.getElementById('game-round-counter');
+            if (session.mode === 'standard') {
+                counterEl.textContent = `Round ${session.round} / 50`;
+            } else {
+                counterEl.textContent = `Question #${session.round}`;
+            }
+
+            // Hide overlays
+            document.getElementById('confidence-modal-overlay').classList.add('hidden');
+            document.getElementById('outcome-overlay').classList.add('hidden');
+
+            // Select one of the 5 fixed symbol pairs
+            const randomIndex = Math.floor(Math.random() * SYMBOL_PAIRS.length);
+            session.currentPair = SYMBOL_PAIRS[randomIndex];
+
+            // Render symbols
+            document.getElementById('symbol-left-slot').innerHTML = session.currentPair.leftSvg;
+            document.getElementById('symbol-right-slot').innerHTML = session.currentPair.rightSvg;
+
+            // Start 3.0s turn countdown
+            startTurnTimer();
+        }
+
+        function startTurnTimer() {
+            clearInterval(session.turnTimerId);
+            session.roundStartTime = performance.now();
+
+            const bar = document.getElementById('game-timer-bar');
+            const text = document.getElementById('game-turn-timer-text');
+            bar.style.width = '100%';
+            bar.style.backgroundColor = 'var(--accent-color)';
+            text.textContent = '3.0s';
+
+            session.turnTimerId = setInterval(() => {
+                if (!session.awaitingChoice) {
+                    clearInterval(session.turnTimerId);
+                    return;
+                }
+                const elapsed = performance.now() - session.roundStartTime;
+                const remaining = Math.max(0, TURN_LIMIT_MS - elapsed);
+                const pct = (remaining / TURN_LIMIT_MS) * 100;
+
+                bar.style.width = `${pct}%`;
+                text.textContent = `${(remaining / 1000).toFixed(1)}s`;
+
+                if (remaining < 1000) {
+                    bar.style.backgroundColor = '#f43f5e';
+                }
+
+                if (remaining <= 0) {
+                    clearInterval(session.turnTimerId);
+                    handleTurnTimeout();
+                }
+            }, 30);
+        }
+
+        function handlePlayerChoice(choice) {
+            if (!session.active || !session.awaitingChoice) return;
+
+            session.awaitingChoice = false;
+            clearInterval(session.turnTimerId);
+
+            const reactionMs = Math.min(TURN_LIMIT_MS, Math.round(performance.now() - session.roundStartTime));
+            session.pendingChoice = choice;
+            session.pendingReactionMs = reactionMs;
+
+            // Check if Standard Mode Rounds 43-50 confidence slider should trigger
+            if (session.mode === 'standard' && session.round >= 43 && session.round <= 50) {
+                session.awaitingConfidence = true;
+                const slider = document.getElementById('conf-slider-input');
+                slider.value = 5;
+                document.getElementById('conf-slider-val').textContent = '5';
+                document.getElementById('confidence-modal-overlay').classList.remove('hidden');
+            } else {
+                resolveRoundOutcome(choice, reactionMs, null);
+            }
+        }
+
+        function submitConfidenceAndReveal() {
+            if (!session.awaitingConfidence) return;
+            session.awaitingConfidence = false;
+            const confVal = parseInt(document.getElementById('conf-slider-input').value, 10) || 5;
+            document.getElementById('confidence-modal-overlay').classList.add('hidden');
+            resolveRoundOutcome(session.pendingChoice, session.pendingReactionMs, confVal);
+        }
+
+        function handleTurnTimeout() {
+            if (!session.active) return;
+            session.awaitingChoice = false;
+            resolveRoundOutcome(null, TURN_LIMIT_MS, null);
+        }
+
+        function resolveRoundOutcome(choice, reactionMs, confidenceVal) {
+            const pair = session.currentPair;
+            const roll = Math.random();
+            const actualOutcome = roll < pair._pDay ? 'Day' : 'Night';
+
+            const isTimeout = choice === null;
+            const isCorrect = !isTimeout && choice === actualOutcome;
+            const isOptimal = !isTimeout && choice === pair._fav;
+
+            // Record trial
+            session.trials.push({
+                round: session.round,
+                pairId: pair.id,
+                choice: choice,
+                actual: actualOutcome,
+                isCorrect: isCorrect,
+                isOptimal: isOptimal,
+                reactionMs: isTimeout ? null : reactionMs,
+                confidence: confidenceVal
+            });
+
+            // Show immediate outcome overlay for 950ms
+            const overlay = document.getElementById('outcome-overlay');
+            const iconBox = document.getElementById('outcome-icon-box');
+            const actualLabel = document.getElementById('outcome-actual-label');
+            const statusTitle = document.getElementById('outcome-status-title');
+            const rtSub = document.getElementById('outcome-rt-sub');
+
+            if (actualOutcome === 'Day') {
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center mb-3 text-4xl shadow-lg bg-amber-400 text-slate-950';
+                iconBox.innerHTML = '☀️';
+                actualLabel.textContent = 'Actual State: DAY';
+            } else {
+                iconBox.className = 'w-20 h-20 rounded-full flex items-center justify-center mb-3 text-4xl shadow-lg bg-indigo-900 text-white border border-indigo-400/40';
+                iconBox.innerHTML = '🌙';
+                actualLabel.textContent = 'Actual State: NIGHT';
+            }
+
+            if (isTimeout) {
+                statusTitle.textContent = 'TIME EXPIRED';
+                statusTitle.className = 'text-3xl sm:text-4xl font-extrabold tracking-tight text-amber-400';
+                rtSub.textContent = 'No selection locked within 3.0s';
+            } else if (isCorrect) {
+                statusTitle.textContent = 'CORRECT PREDICTION';
+                statusTitle.className = 'text-3xl sm:text-4xl font-extrabold tracking-tight text-emerald-400';
+                rtSub.textContent = `Decision Speed: ${reactionMs} ms`;
+            } else {
+                statusTitle.textContent = 'INCORRECT';
+                statusTitle.className = 'text-3xl sm:text-4xl font-extrabold tracking-tight text-rose-500';
+                rtSub.textContent = `Decision Speed: ${reactionMs} ms`;
+            }
+
+            overlay.classList.remove('hidden');
+
+            setTimeout(() => {
+                if (!session.active) return;
+                nextRound();
+            }, 950);
+        }
+
+        /* =========================================================
+           8. END-OF-RUN ANALYTICS & METRICS ENGINE
+              (ZERO SPOILERS OF UNDERLYING SYMBOL PROBABILITIES)
+           ========================================================= */
+        function finishAssessment() {
+            stopAllTimers();
+            session.active = false;
+
+            const totalQuestions = session.trials.length;
+            if (totalQuestions === 0) {
+                navigateTo('landing');
+                return;
+            }
+
+            const totalDurationSec = Math.max(1, Math.round((Date.now() - session.sessionStartTime) / 1000));
+            const answeredTrials = session.trials.filter(t => t.choice !== null);
+            const timeoutsCount = totalQuestions - answeredTrials.length;
+
+            const correctCount = session.trials.filter(t => t.isCorrect).length;
+            const rawAccuracy = Math.round((correctCount / totalQuestions) * 100);
+
+            // Strategy Consistency %: % of answered trials where player chose the mathematically optimal side
+            // (after seeing a pair at least once, or overall answered trials)
+            const optimalCount = answeredTrials.filter(t => t.isOptimal).length;
+            const consistencyPct = answeredTrials.length > 0
+                ? Math.round((optimalCount / answeredTrials.length) * 100)
+                : 0;
+
+            // Resilience to Variance Score:
+            // Whenever a player picks the optimal choice on Pair X, but gets an unlucky roll (isOptimal && !isCorrect),
+            // check the VERY NEXT time Pair X appears. Did they stay disciplined with the optimal choice?
+            let varianceTests = 0;
+            let varianceHeld = 0;
+            SYMBOL_PAIRS.forEach(pair => {
+                const pairTrials = answeredTrials.filter(t => t.pairId === pair.id);
+                for (let i = 0; i < pairTrials.length - 1; i++) {
+                    if (pairTrials[i].isOptimal && !pairTrials[i].isCorrect) {
+                        varianceTests++;
+                        if (pairTrials[i + 1].isOptimal) {
+                            varianceHeld++;
+                        }
+                    }
+                }
+            });
+            const resiliencePct = varianceTests > 0
+                ? Math.round((varianceHeld / varianceTests) * 100)
+                : consistencyPct;
+
+            // Average Reaction Time
+            const avgReactionMs = answeredTrials.length > 0
+                ? Math.round(answeredTrials.reduce((acc, t) => acc + t.reactionMs, 0) / answeredTrials.length)
+                : 0;
+
+            // Confidence Calibration Score (Standard Mode Rounds 43-50)
+            let calibrationPct = null;
+            const confTrials = answeredTrials.filter(t => t.confidence !== null);
+            if (confTrials.length > 0) {
+                // Compare user's 1-10 confidence against pair stability without revealing it
+                let totalDiff = 0;
+                confTrials.forEach(t => {
+                    const pairObj = SYMBOL_PAIRS.find(p => p.id === t.pairId);
+                    const strength = Math.max(pairObj._pDay, 1 - pairObj._pDay); // 0.68 to 0.85
+                    // Map strength (0.65..0.85) to ideal confidence (6..9)
+                    const idealConf = t.isOptimal ? Math.round((strength - 0.5) * 22) : 4;
+                    totalDiff += Math.abs(t.confidence - idealConf);
+                });
+                const avgDiff = totalDiff / confTrials.length;
+                calibrationPct = Math.max(0, Math.min(100, Math.round(100 - avgDiff * 11)));
+            }
+
+            // Save run to history
+            const runRecord = {
+                id: Date.now(),
+                timestamp: new Date().toLocaleString([], { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' }),
+                mode: session.mode,
+                questions: totalQuestions,
+                correct: correctCount,
+                accuracy: rawAccuracy,
+                consistency: consistencyPct,
+                resilience: resiliencePct,
+                avgReactionMs: avgReactionMs,
+                timeouts: timeoutsCount,
+                durationSec: totalDurationSec,
+                calibration: calibrationPct
+            };
+
+            appState.history.unshift(runRecord);
+            saveHistoryToStorage();
+
+            // Render Results Dashboard
+            populateResultsDashboard(runRecord);
+            navigateTo('results');
+        }
+
+        function populateResultsDashboard(run) {
+            updateUserGreetings();
+
+            document.getElementById('res-mode-pill').textContent =
+                run.mode === 'standard'
+                    ? 'Standard 50-Round Assessment Complete'
+                    : `Endurance Session Complete • ${run.questions} Questions`;
+
+            document.getElementById('res-accuracy').textContent = `${run.accuracy}%`;
+            document.getElementById('res-accuracy-sub').textContent = `${run.correct} / ${run.questions} predictions matched`;
+
+            document.getElementById('res-consistency').textContent = `${run.consistency}%`;
+            document.getElementById('res-resilience').textContent = `${run.resilience}%`;
+            document.getElementById('res-rt').textContent = `${run.avgReactionMs} ms`;
+            document.getElementById('res-timeouts').textContent = `${run.timeouts} Timeout${run.timeouts === 1 ? '' : 's'}`;
+
+            // 5th KPI card adapts to Standard vs Endurance
+            const fifthLabel = document.getElementById('res-fifth-label');
+            const fifthVal = document.getElementById('res-fifth-val');
+            const fifthSub = document.getElementById('res-fifth-sub');
+
+            if (run.mode === 'standard') {
+                fifthLabel.textContent = 'Confidence Calibration';
+                fifthVal.textContent = run.calibration !== null ? `${run.calibration}%` : '—';
+                fifthSub.textContent = 'Rounds 43–50 metacognition';
+            } else {
+                fifthLabel.textContent = 'Volume & Duration';
+                fifthVal.textContent = `${run.questions} Qs`;
+                fifthSub.textContent = `Elapsed Time: ${formatDuration(run.durationSec)}`;
+            }
+
+            // Generate Coaching Feedback (Strictly without revealing pair probabilities)
+            const coachingBox = document.getElementById('res-coaching-text');
+            let feedbackHtml = '';
+
+            if (run.consistency >= 82) {
+                feedbackHtml += `<p><strong class="text-emerald-400">High Strategic Discipline (${run.consistency}%):</strong> You rapidly locked onto the dominant outcomes for the 5 symbol pairs and maintained a consistent strategy even when random statistical anomalies occurred.</p>`;
+            } else if (run.consistency >= 65) {
+                feedbackHtml += `<p><strong class="text-amber-400">Developing Pattern Stability (${run.consistency}%):</strong> You identified the leaning of most symbol pairs, but occasionally switched your prediction after experiencing an unexpected negative outcome. Trust your mental tally over a larger sample size.</p>`;
+            } else {
+                feedbackHtml += `<p><strong class="text-rose-400">High Strategy Switching (${run.consistency}%):</strong> You frequently alternated between Day and Night on the same symbol pairs. Avoid searching for complex alternating sequences—each pair favours one dominant outcome over time.</p>`;
+            }
+
+            if (run.resilience >= 80) {
+                feedbackHtml += `<p><strong class="text-sky-400">Strong Variance Resilience (${run.resilience}%):</strong> When an unlucky probability roll went against a strong choice, you kept your composure and stuck with your strategy on the pair's next appearance.</p>`;
+            } else {
+                feedbackHtml += `<p><strong class="text-amber-400">Watch Out for "Win-Stay, Lose-Shift" Traps (${run.resilience}% Resilience):</strong> On several occasions, a single unlucky anomaly caused you to abandon a statistically sound rule on the very next appearance of that pair.</p>`;
+            }
+
+            if (run.timeouts > 0) {
+                feedbackHtml += `<p><strong class="text-rose-400">Time Management Alert:</strong> You had ${run.timeouts} missed round(s). In the real Arctic Shores assessment, locking in an educated guess before 3.0s is always superior to letting the clock expire.</p>`;
+            }
+
+            coachingBox.innerHTML = feedbackHtml;
+
+            // Populate Pair-by-Pair Table (Strictly NO underlying probability spoilers)
+            const tbody = document.getElementById('res-pair-tbody');
+            tbody.innerHTML = '';
+
+            SYMBOL_PAIRS.forEach(pair => {
+                const pTrials = session.trials.filter(t => t.pairId === pair.id);
+                const pAnswered = pTrials.filter(t => t.choice !== null);
+                const count = pTrials.length;
+                const wins = pTrials.filter(t => t.isCorrect).length;
+                const winRate = count > 0 ? Math.round((wins / count) * 100) : 0;
+
+                const dayPicks = pAnswered.filter(t => t.choice === 'Day').length;
+                const nightPicks = pAnswered.filter(t => t.choice === 'Night').length;
+
+                let tendencyStr = 'No picks recorded';
+                if (pAnswered.length > 0) {
+                    if (dayPicks >= nightPicks) {
+                        const pct = Math.round((dayPicks / pAnswered.length) * 100);
+                        tendencyStr = `Picked DAY ${pct}% (${dayPicks}/${pAnswered.length})`;
+                    } else {
+                        const pct = Math.round((nightPicks / pAnswered.length) * 100);
+                        tendencyStr = `Picked NIGHT ${pct}% (${nightPicks}/${pAnswered.length})`;
+                    }
+                }
+
+                const avgRt = pAnswered.length > 0
+                    ? `${Math.round(pAnswered.reduce((a, b) => a + b.reactionMs, 0) / pAnswered.length)} ms`
+                    : '—';
+
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="py-3.5 pr-4">
+                        <div class="flex items-center gap-3">
+                            <div class="flex items-center gap-1.5">
+                                <div class="w-8 h-8 rounded-lg symbol-box p-1 flex items-center justify-center">${pair.leftSvg}</div>
+                                <div class="w-8 h-8 rounded-lg symbol-box p-1 flex items-center justify-center">${pair.rightSvg}</div>
+                            </div>
+                            <span class="font-semibold text-xs sm:text-sm">${pair.label}</span>
+                        </div>
+                    </td>
+                    <td class="py-3.5 font-mono-num text-xs sm:text-sm">${count}x</td>
+                    <td class="py-3.5 text-xs sm:text-sm font-medium">${tendencyStr}</td>
+                    <td class="py-3.5 font-mono-num text-xs sm:text-sm font-bold">${count > 0 ? winRate + '%' : '—'}</td>
+                    <td class="py-3.5 font-mono-num text-xs sm:text-sm text-right">${avgRt}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* =========================================================
+           9. MINI-DASHBOARDS & FULL 15-RUN HISTORY RENDERERS
+           ========================================================= */
+        function renderMiniDashboards() {
+            const stdRuns = appState.history.filter(r => r.mode === 'standard');
+            const endRuns = appState.history.filter(r => r.mode === 'endurance');
+
+            // Standard Aggregates
+            document.getElementById('std-total-runs').textContent = `${stdRuns.length} Run${stdRuns.length === 1 ? '' : 's'}`;
+            document.getElementById('std-best-acc').textContent = stdRuns.length > 0 ? `${Math.max(...stdRuns.map(r => r.accuracy))}%` : '—';
+            document.getElementById('std-best-cons').textContent = stdRuns.length > 0 ? `${Math.max(...stdRuns.map(r => r.consistency))}%` : '—';
+            document.getElementById('std-avg-rt').textContent = stdRuns.length > 0
+                ? `${Math.round(stdRuns.reduce((a, b) => a + b.avgReactionMs, 0) / stdRuns.length)}ms`
+                : '—';
+
+            // Standard Recent 3 Table
+            const stdTbody = document.getElementById('std-recent-tbody');
+            stdTbody.innerHTML = '';
+            if (stdRuns.length === 0) {
+                stdTbody.innerHTML = `<tr><td colspan="4" class="py-4 text-center theme-text-muted">No Standard 50-Round runs recorded yet.</td></tr>`;
+            } else {
+                stdRuns.slice(0, 3).forEach(r => {
+                    stdTbody.innerHTML += `
+                        <tr>
+                            <td class="py-2.5">${r.timestamp}</td>
+                            <td class="py-2.5 font-mono-num font-bold">${r.accuracy}%</td>
+                            <td class="py-2.5 font-mono-num text-emerald-500 font-bold">${r.consistency}%</td>
+                            <td class="py-2.5 font-mono-num text-right">${r.avgReactionMs} ms</td>
+                        </tr>
+                    `;
+                });
+            }
+
+            // Endurance Aggregates
+            document.getElementById('end-total-runs').textContent = `${endRuns.length} Run${endRuns.length === 1 ? '' : 's'}`;
+            document.getElementById('end-best-acc').textContent = endRuns.length > 0 ? `${Math.max(...endRuns.map(r => r.accuracy))}%` : '—';
+            document.getElementById('end-best-cons').textContent = endRuns.length > 0 ? `${Math.max(...endRuns.map(r => r.consistency))}%` : '—';
+            document.getElementById('end-avg-rt').textContent = endRuns.length > 0
+                ? `${Math.round(endRuns.reduce((a, b) => a + b.avgReactionMs, 0) / endRuns.length)}ms`
+                : '—';
+
+            // Endurance Recent 3 Table (Includes Questions Answered & Duration)
+            const endTbody = document.getElementById('end-recent-tbody');
+            endTbody.innerHTML = '';
+            if (endRuns.length === 0) {
+                endTbody.innerHTML = `<tr><td colspan="5" class="py-4 text-center theme-text-muted">No Endurance Free Play runs recorded yet.</td></tr>`;
+            } else {
+                endRuns.slice(0, 3).forEach(r => {
+                    endTbody.innerHTML += `
+                        <tr>
+                            <td class="py-2.5">${r.timestamp}</td>
+                            <td class="py-2.5 font-mono-num font-semibold">${r.questions} Qs</td>
+                            <td class="py-2.5 font-mono-num font-bold">${r.accuracy}%</td>
+                            <td class="py-2.5 font-mono-num text-emerald-500 font-bold">${r.consistency}%</td>
+                            <td class="py-2.5 font-mono-num text-right">${formatDuration(r.durationSec)}</td>
+                        </tr>
+                    `;
+                });
+            }
+        }
+
+        function setHistoryFilter(filter) {
+            appState.historyFilter = filter;
+            ['all', 'standard', 'endurance'].forEach(tab => {
+                const btn = document.getElementById(`hist-tab-${tab}`);
+                if (tab === filter) {
+                    btn.className = 'theme-accent-btn px-3.5 py-2 rounded-xl text-xs font-bold';
+                } else {
+                    btn.className = 'theme-card px-3.5 py-2 rounded-xl text-xs font-bold';
+                }
+            });
+            renderFullHistoryTable();
+        }
+
+        function renderFullHistoryTable() {
+            const tbody = document.getElementById('full-history-tbody');
+            tbody.innerHTML = '';
+
+            let filtered = appState.history;
+            if (appState.historyFilter !== 'all') {
+                filtered = appState.history.filter(r => r.mode === appState.historyFilter);
+            }
+
+            const recent15 = filtered.slice(0, 15);
+            if (recent15.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="9" class="py-8 text-center theme-text-muted">No sessions recorded for this filter yet. Launch a game mode to start tracking!</td></tr>`;
+                return;
+            }
+
+            recent15.forEach((r, idx) => {
+                const modeBadge = r.mode === 'standard'
+                    ? `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-blue-500/15 text-blue-400">Standard (50)</span>`
+                    : `<span class="px-2.5 py-0.5 rounded-full text-[11px] font-bold bg-amber-500/15 text-amber-400">Endurance</span>`;
+
+                const extraMetric = r.mode === 'standard'
+                    ? `Calib: ${r.calibration !== null ? r.calibration + '%' : '—'}`
+                    : `Time: ${formatDuration(r.durationSec)}`;
+
+                tbody.innerHTML += `
+                    <tr>
+                        <td class="py-3 font-mono-num text-xs theme-text-muted">#${idx + 1}</td>
+                        <td class="py-3 text-xs sm:text-sm">${r.timestamp}</td>
+                        <td class="py-3">${modeBadge}</td>
+                        <td class="py-3 font-mono-num font-semibold">${r.questions} Qs</td>
+                        <td class="py-3 font-mono-num font-bold">${r.accuracy}%</td>
+                        <td class="py-3 font-mono-num font-bold text-emerald-500">${r.consistency}%</td>
+                        <td class="py-3 font-mono-num font-bold text-sky-400">${r.resilience}%</td>
+                        <td class="py-3 font-mono-num">${r.avgReactionMs} ms</td>
+                        <td class="py-3 font-mono-num text-xs text-right">${extraMetric}</td>
+                    </tr>
+                `;
+            });
+        }
+
+        function formatDuration(totalSec) {
+            const mins = Math.floor(totalSec / 60);
+            const secs = totalSec % 60;
+            return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+        }
+    </script>
+</body>
+</html>
